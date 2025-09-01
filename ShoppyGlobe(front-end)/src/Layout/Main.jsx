@@ -11,7 +11,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 const Card =lazy(()=>import  ("../Components/Card"))
 
 function Main() {
-  const url = "http://localhost:5000/products";
+  const url = "http://localhost:5000/api/products";
   //api updated
   const { products: pdtArr, loading, error } = useFetchProducts(url);
   const [filteredPdt, setFilterdPdt] = useState([]);

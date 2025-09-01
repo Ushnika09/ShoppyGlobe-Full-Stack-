@@ -14,7 +14,7 @@ function ProductDetail() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:5000/products/${id}`)
+    fetch(`http://localhost:5000/api/products/${id}`)
       .then(res => res.json())
       .then(data => {
         setProduct(data);

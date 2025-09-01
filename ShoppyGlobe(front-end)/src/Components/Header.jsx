@@ -2,16 +2,24 @@ import React, { useEffect, useContext, useState } from "react";
 import logo from "../assets/logo.png";
 import search from "../assets/search.png";
 import cart from "../assets/cart.png";
-import { Link, useLocation } from "react-router-dom";
-// import CartContext from "./CartContext";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import SearchContext from "./SearchContext";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { FaRegUserCircle } from "react-icons/fa";
+import { logout } from "../redux/authSlice";
+import { PiSignOutBold } from "react-icons/pi";
 
 function Header() {
   const [online, setOnline] = useState(navigator.onLine);
   const location = useLocation();
-  const  cartItems = useSelector((state) => state.cart.items);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const cartItems = useSelector((state) => state.cart.items);
   const { searchItems, setSearchItems } = useContext(SearchContext);
+
+  // 👇 new: auth state
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const goOnline = () => setOnline(true);
@@ -26,12 +34,16 @@ function Header() {
     };
   }, []);
 
+  const handleLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem("token");
+    navigate("/signin"); // redirect to signin after logout
+  };
+
   return (
     <div className="py-4 px-5 bg-white/90 shadow-md fixed top-0 w-full z-10 flex justify-center items-center flex-wrap">
-
       {/* Main Row: Logo, Search, Home+Cart */}
       <div className="flex items-center justify-between w-full gap-16">
-
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 flex-shrink-0">
           <div className="relative">
@@ -67,7 +79,7 @@ function Header() {
           />
         </div>
 
-        {/* Home + Cart */}
+        {/* Home + Cart + Auth */}
         <div className="flex items-center gap-4 md:gap-6 flex-shrink-0">
           <Link
             to="/"
@@ -80,19 +92,45 @@ function Header() {
 
           <Link
             to="cart"
-            className={`hover:cursor-pointer hover:text-[#00BFFF]   hover:bg-neutral-100 rounded-sm duration-300 relative shrink-0 ${
-              location.pathname === "/cart" ? "bg-[#00BFFF] text-white" : "bg-white/0"
+            className={`hover:cursor-pointer hover:text-[#00BFFF] hover:bg-neutral-100 rounded-sm duration-300 relative shrink-0 ${
+              location.pathname === "/cart"
+                ? "bg-[#00BFFF] text-white"
+                : "bg-white/0"
             }`}
           >
-            <img
-              src={cart}
-              alt=""
-              className="h-8 md:h-10 p-1 px-3"
-            />
+            <img src={cart} alt="" className="h-8 md:h-10 p-1 px-3" />
             <div className="md:h-7 md:w-7 h-5 w-5 rounded-full flex justify-center items-center bg-red-800 text-white text-[0.7rem] md:text-xl font-semibold absolute md:bottom-5 md:left-8 bottom-4.5 left-7">
               {cartItems.length}
             </div>
           </Link>
+
+          {/* 👇 Auth Links */}
+          {user ? (
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-medium">Hi, {user.name}</span>
+              <button
+                onClick={handleLogout}
+                className={`hover:cursor-pointer hover:text-[#00BFFF] hover:bg-neutral-100 rounded-sm duration-300 relative shrink-0 ${
+                location.pathname === "/signin"
+                  ? "bg-[#00BFFF] text-white"
+                  : "bg-white/0"
+              }`}
+              >
+                <PiSignOutBold className="text-2xl md:text-3xl" />
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/signin"
+              className={`hover:cursor-pointer hover:text-[#00BFFF] hover:bg-neutral-100 rounded-sm duration-300 relative shrink-0 ${
+                location.pathname === "/signin"
+                  ? "text-[#00BFFF] t"
+                  : "bg-white/0"
+              }`}
+            >
+              <FaRegUserCircle className="text-2xl md:text-3xl" />
+            </Link>
+          )}
         </div>
       </div>
 

@@ -11,6 +11,8 @@ import ProductDetail from "./Layout/ProductDetail.jsx";
 import Main from "./Layout/Main.jsx";
 import Cart from "./Layout/Cart.jsx";
 import CheckoutPage from "./Layout/CheckOutPage.jsx";
+import SignIn from "./Layout/SignIn.jsx";
+import SignUp from "./Layout/SignUp.jsx";
 
 const appRoutes = createBrowserRouter([
   {
@@ -32,7 +34,15 @@ const appRoutes = createBrowserRouter([
       },
       {
         path: "cart/checkout",
-        element: <CheckoutPage/>
+        element: <CheckoutPage />,
+      },
+      {
+        path: "signin",
+        element: <SignIn />,
+      },
+      {
+        path: "signup",
+        element: <SignUp />,
       },
     ],
   },
