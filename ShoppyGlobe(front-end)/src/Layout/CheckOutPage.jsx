@@ -2,7 +2,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { clearCart } from "../redux/cartSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 const paymentOptions = [
   "Credit/Debit Card",
@@ -14,16 +15,29 @@ const paymentOptions = [
 export default function CheckoutPage() {
   const [selected, setSelected] = useState("");
   const [orderPlaced, setOrderPlaced] = useState(false);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const token = useSelector((state) => state.auth.token); // get token from redux
 
-  const handlePlaceOrder = () => {
-    setOrderPlaced(true);
+  const handlePlaceOrder = async () => {
+    try {
+      // Clear backend cart
+      if (token) {
+        await axios.delete("http://localhost:5000/cart", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
 
-    setTimeout(() => {
+      // Clear frontend cart
       dispatch(clearCart());
-      navigate("/"); // back to home
-    }, 1800);
+      setOrderPlaced(true);
+
+      setTimeout(() => {
+        navigate("/"); // redirect to home
+      }, 1800);
+    } catch (err) {
+      console.error(err.response?.data || err.message);
+    }
   };
 
   return (

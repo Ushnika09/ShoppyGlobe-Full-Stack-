@@ -1,78 +1,74 @@
 import React, { useEffect, useState, useContext, lazy, Suspense } from "react";
 import Slider from "../Components/Slider";
 import Actions from "../Components/Actions";
-
 import SearchContext from "../Components/SearchContext";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/cartSlice";
 import useFetchProducts from "../hooks/useFetchProducts";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import axios from "axios";
 
-const Card =lazy(()=>import  ("../Components/Card"))
+const Card = lazy(() => import("../Components/Card"));
 
 function Main() {
   const url = "http://localhost:5000/api/products";
-  //api updated
   const { products: pdtArr, loading, error } = useFetchProducts(url);
   const [filteredPdt, setFilterdPdt] = useState([]);
   const { searchItems, setSearchItems } = useContext(SearchContext);
-
   const [sortOpt, setSortOpt] = useState("");
   const [category, setCategory] = useState("all");
 
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     setFilterdPdt(pdtArr);
-    // console.log(pdtArr);
   }, [pdtArr]);
 
   useEffect(() => {
-    const query = searchItems.trim().toLowerCase();
     let res = [...pdtArr];
+    const query = searchItems.trim().toLowerCase();
 
-    if (query !== "") {
-      res = res.filter((p) => p.title.toLowerCase().startsWith(query));
-    }
+    if (query !== "") res = res.filter((p) => p.title.toLowerCase().startsWith(query));
+    if (category !== "all") res = res.filter((p) => p.category === category);
 
-    if (category !== "all") {
-      res = res.filter((p) => p.category === category);
-    }
-
-    if (sortOpt === "a-z") {
-      res.sort((a, b) => a.title.localeCompare(b.title));
-    } else if (sortOpt === "high-low") {
-      res.sort((a, b) => b.price - a.price);
-    } else if (sortOpt === "low-high") {
-      res.sort((a, b) => a.price - b.price);
-    } else if (sortOpt === "rating") {
-      res = res.filter((p) => p.rating >= 4);
-    }
+    if (sortOpt === "a-z") res.sort((a, b) => a.title.localeCompare(b.title));
+    else if (sortOpt === "high-low") res.sort((a, b) => b.price - a.price);
+    else if (sortOpt === "low-high") res.sort((a, b) => a.price - b.price);
+    else if (sortOpt === "rating") res = res.filter((p) => p.rating >= 4);
 
     setFilterdPdt(res);
   }, [pdtArr, searchItems, category, sortOpt]);
 
   const categories = [...new Set(pdtArr.map((p) => p.category))];
 
-  const handleAddToCart = (pdt) => {
-    dispatch(addToCart(pdt));
+  // Add product to backend cart
+  const handleAddToCart = async (pdt) => {
+    if (!token) return alert("Login first to add to cart");
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/cart",
+        { productId: pdt._id, quantity: 1 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      dispatch(addToCart(res.data));
+    } catch (err) {
+      console.error(err.response?.data || err.message);
+    }
   };
 
-  if (loading) {
+  if (loading)
     return (
       <div className="flex justify-center items-center min-h-[60vh] text-[#00BFFF] text-xl font-semibold">
         Loading products...
       </div>
     );
-  }
 
-  if (error) {
+  if (error)
     return (
       <div className="flex justify-center items-center min-h-[60vh] text-red-500 text-xl font-semibold">
         Failed to load products.
       </div>
     );
-  }
 
   return (
     <div className="min-h-screen">

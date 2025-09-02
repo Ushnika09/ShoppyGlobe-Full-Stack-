@@ -19,7 +19,7 @@ export default function Signup() {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/signup", {
+      const res = await fetch("http://localhost:5000/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -81,7 +81,7 @@ export default function Signup() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition disabled:opacity-50"
+          className="w-full bg-[#00BFFF] text-white py-2 rounded-lg hover:bg-[#00BFFF]/90 transition disabled:opacity-50"
         >
           {loading ? "Signing up..." : "Signup"}
         </button>

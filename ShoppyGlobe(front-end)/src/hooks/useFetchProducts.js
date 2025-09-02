@@ -12,7 +12,7 @@ export default function useFetchProducts(url) {
       .then(res => res.json())
       .then(data => {
         setProducts(data || []);
-        console.log(data);
+        // console.log(data);
         setLoading(false);
       })
       .catch(err => {

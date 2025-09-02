@@ -16,10 +16,15 @@ function Header() {
   const dispatch = useDispatch();
 
   const cartItems = useSelector((state) => state.cart.items);
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
   const { searchItems, setSearchItems } = useContext(SearchContext);
 
   // 👇 new: auth state
   const { user } = useSelector((state) => state.auth);
+//   useEffect(() => {
+//   console.log("Auth user:", user?.name);
+// }, [user]);
 
   useEffect(() => {
     const goOnline = () => setOnline(true);
@@ -100,7 +105,7 @@ function Header() {
           >
             <img src={cart} alt="" className="h-8 md:h-10 p-1 px-3" />
             <div className="md:h-7 md:w-7 h-5 w-5 rounded-full flex justify-center items-center bg-red-800 text-white text-[0.7rem] md:text-xl font-semibold absolute md:bottom-5 md:left-8 bottom-4.5 left-7">
-              {cartItems.length}
+              {totalItems}
             </div>
           </Link>
 
@@ -108,7 +113,7 @@ function Header() {
           {user ? (
             <div className="flex items-center gap-3">
               <span className="text-sm font-medium">Hi, {user.name}</span>
-              <button
+              <Link to={"/"}
                 onClick={handleLogout}
                 className={`hover:cursor-pointer hover:text-[#00BFFF] hover:bg-neutral-100 rounded-sm duration-300 relative shrink-0 ${
                 location.pathname === "/signin"
@@ -117,7 +122,7 @@ function Header() {
               }`}
               >
                 <PiSignOutBold className="text-2xl md:text-3xl" />
-              </button>
+              </Link>
             </div>
           ) : (
             <Link

@@ -4,6 +4,7 @@ import connectDb from "./config/db.js"
 import ProductRoutes from "./Routes/ProductRoutes.js"
 import UserRoutes from "./Routes/UserRoutes.js"
 import cors from "cors"
+import CartRoutes from "./Routes/CartRoutes.js"
 
 const app=express()
 
@@ -19,9 +20,11 @@ app.use(express.json())
 configDotenv()
 connectDb()
 
+
 app.use("/api/products", ProductRoutes);
 app.use("/api/auth", UserRoutes);
 
+app.use("/cart", CartRoutes);
 
 
 app.get("/",(req,res)=>{
