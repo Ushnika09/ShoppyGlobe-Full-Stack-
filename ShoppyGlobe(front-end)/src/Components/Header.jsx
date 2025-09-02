@@ -40,10 +40,11 @@ function Header() {
   }, []);
 
   const handleLogout = () => {
-    dispatch(logout());
-    localStorage.removeItem("token");
-    navigate("/signin"); // redirect to signin after logout
-  };
+  dispatch(logout());
+  localStorage.removeItem("token");
+  navigate("/logout"); // go to logout page first
+};
+
 
   return (
     <div className="py-4 px-5 bg-white/90 shadow-md fixed top-0 w-full z-10 flex justify-center items-center flex-wrap">
@@ -113,13 +114,14 @@ function Header() {
           {user ? (
             <div className="flex items-center gap-3">
               <span className="text-sm font-medium">Hi, {user.name}</span>
-              <Link to={"/"}
+              <Link to={"/logout"}
                 onClick={handleLogout}
                 className={`hover:cursor-pointer hover:text-[#00BFFF] hover:bg-neutral-100 rounded-sm duration-300 relative shrink-0 ${
                 location.pathname === "/signin"
                   ? "bg-[#00BFFF] text-white"
                   : "bg-white/0"
               }`}
+              
               >
                 <PiSignOutBold className="text-2xl md:text-3xl" />
               </Link>

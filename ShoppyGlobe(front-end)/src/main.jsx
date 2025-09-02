@@ -13,6 +13,7 @@ import Cart from "./Layout/Cart.jsx";
 import CheckoutPage from "./Layout/CheckOutPage.jsx";
 import SignIn from "./Layout/SignIn.jsx";
 import SignUp from "./Layout/SignUp.jsx";
+import Logout from "./Layout/Logout.jsx";
 
 const appRoutes = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const appRoutes = createBrowserRouter([
       {
         path: "signup",
         element: <SignUp />,
+      },
+            {
+        path: "logout",
+        element: <Logout/>
       },
     ],
   },
