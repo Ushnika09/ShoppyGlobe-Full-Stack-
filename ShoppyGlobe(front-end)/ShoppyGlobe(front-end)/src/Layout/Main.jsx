@@ -6,11 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/cartSlice";
 import useFetchProducts from "../hooks/useFetchProducts";
 import axios from "axios";
+import API_BASE_URL from "../../config";
 
 const Card = lazy(() => import("../Components/Card"));
 
 function Main() {
-  const url = "http://localhost:5000/api/products";
+  const url =`${API_BASE_URL}/api/products`
+
   const { products: pdtArr, loading, error } = useFetchProducts(url);
   const [filteredPdt, setFilterdPdt] = useState([]);
   const { searchItems, setSearchItems } = useContext(SearchContext);

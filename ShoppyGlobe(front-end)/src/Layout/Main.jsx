@@ -60,16 +60,22 @@ function Main() {
 
   if (loading)
     return (
+      <>
+      <Slider/>
       <div className="flex justify-center items-center min-h-[60vh] text-[#00BFFF] text-xl font-semibold">
         Loading products...
       </div>
+      </>
     );
 
   if (error)
     return (
+      <>
+      <Slider/>
       <div className="flex justify-center items-center min-h-[60vh] text-red-500 text-xl font-semibold">
         Failed to load products.
       </div>
+      </>
     );
 
   return (

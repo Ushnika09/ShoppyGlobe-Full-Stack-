@@ -5,6 +5,7 @@ import { addToCart } from "../redux/cartSlice";
 import cart from "../assets/cart.png";
 import star from "../assets/star.png";
 import axios from "axios";
+import API_BASE_URL from "../../config";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -17,7 +18,7 @@ function ProductDetail() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:5000/api/products/${id}`)
+    fetch(`${API_BASE_URL}/api/products/${id}`)
       .then(res => res.json())
       .then(data => {
         setProduct(data);
