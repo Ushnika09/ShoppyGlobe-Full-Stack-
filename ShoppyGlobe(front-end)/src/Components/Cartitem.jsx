@@ -4,6 +4,7 @@ import { addToCart, removeFromCart, clearCart, increaseQty, decreaseQty } from "
 import delIcon from "../assets/del.png";
 import OrderSummary from "./OrderSummary";
 import axios from "axios";
+import API_BASE_URL from "../../config";
 
 function Cartitem() {
   const cartItems = useSelector((state) => state.cart.items);
@@ -11,7 +12,8 @@ function Cartitem() {
   const token = useSelector((state) => state.auth.token);
   const [showCheckout, setShowCheckout] = useState(false);
 
-  const API_BASE = "http://localhost:5000/cart";
+  const API_BASE = `${API_BASE_URL}/cart`;
+  
 
   // Fetch cart on mount
   useEffect(() => {
