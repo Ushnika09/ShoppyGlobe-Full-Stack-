@@ -60,12 +60,13 @@ npm install
 npm start
 ```
 ## 📁 Project Structure
-bash
-Copy code
+```bash
+
 ShoppyGlobe-Full-Stack-/
 ├── shoppyglobe-backend/
 ├── shoppyglobe-frontend/
 └── README.md
+```
 
 ## 🔧 Environment Variables
 ```bash
